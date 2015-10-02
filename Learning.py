@@ -95,7 +95,6 @@ def main():
 	
 	n_channel = 3
 	n_output = len(dirs)
-	#n_train = 520
 	n_train = sys.argv[1]
 	n_test = sys.argv[2]
 	max_epoch = 100
