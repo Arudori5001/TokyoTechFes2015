@@ -15,7 +15,6 @@ import Learning
 def preprocess(input_file):
     """
     @summary: 予測する画像の整形を行う。
-    画像はデスクトップから移動して取得する
     @param input_file: str 予測する画像のパス
     @return: PIL.Image 整形後の画像
     PIL.Image 顔認識の枠の書かれた画像
@@ -74,9 +73,6 @@ def preprocess(input_file):
     com = "display %s"%(resized_file)
     os.system(com)
 
-    #make LibSVM inputs
-    #libsvm_file = "input.libsvm"
-    #f = open(libsvm_file, 'w')
     img = Image.open(resized_file)
     img.convert("RGB")
 
