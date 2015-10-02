@@ -10,6 +10,7 @@ from os.path import join, relpath
 import glob
 import pickle
 from PIL import Image
+import sys
 import time
 import random
 
@@ -94,8 +95,9 @@ def main():
 	
 	n_channel = 3
 	n_output = len(dirs)
-	n_train = 520
-	n_test = 130
+	#n_train = 520
+	n_train = sys.argv[1]
+	n_test = sys.argv[2]
 	max_epoch = 100
 	look_back = 10
 	prop_increase = 0.01
