@@ -12,7 +12,7 @@ import pickle
 import Learning
 
 
-def preprocess():
+def preprocess(input_file):
     """
     @summary: 判定する画像の整形を行う。
     画像はデスクトップから移動して取得する
@@ -20,10 +20,10 @@ def preprocess():
     PIL.Image 顔認識の枠の書かれた画像
     """
     
-    #デスクトップにある画像を./in.jpgに移動&リネーム
-    com = "mv ~/Desktop/*jpg in.jpg"
-    os.system(com)
-    input_file = "in.jpg"
+    
+    #com = "mv ~/Desktop/*jpg in.jpg"
+    #os.system(com)
+    #input_file = "in.jpg"
     
     #顔認識をする
     cascade_path = "/usr/local/opt/opencv/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml"
@@ -171,10 +171,10 @@ def predict(img):
 
 
 if __name__ == "__main__":
-    img, face_file = preprocess()
+    input_file = sys.argv[1]
+    img, face_file = preprocess(input_file)
     
     res, res_prob, probs = predict(img)
-    
     
     display_result(res, res_prob, probs, face_file)
     

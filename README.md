@@ -1,10 +1,14 @@
 # TokyoTechFes2015
 
 ## Requirements
-* ImageMagick
-* OpenCV
-* pillow
-* Chainer
+* ImageMagick  
+macならば http://cactuslab.com/imagemagick/ など
+* OpenCV  
+`pip install cv2`
+* pillow  
+`pip install pillow`
+* Chainer  
+`pip install chainer`
 
 ## Installation
 ```
@@ -15,7 +19,11 @@ unzip dataset.zip
 
 ## Usage
 ### 予測
-予測したいファイルをデスクトップに置いてから
 ```
-python bbteam_pred.py
+python bbteam_pred.py （予測したい画像のパス）
 ```
+
+### 学習
+1. `dataset`フォルダ内に判別したいクラスの名前のフォルダをそれぞれ作成する
+2. 作成したフォルダにそれぞれのクラスの画像を入れる
+3. ```python Learning.py```
