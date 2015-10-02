@@ -9,7 +9,7 @@ macならば http://cactuslab.com/imagemagick/ など
 `pip install pillow`
 * Chainer  
 `pip install chainer`
-* matplotlib
+* matplotlib  
 `pip install matplotlib`
 
 ## Installation
