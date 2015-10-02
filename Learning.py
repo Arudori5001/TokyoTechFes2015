@@ -95,8 +95,8 @@ def main():
 	
 	n_channel = 3
 	n_output = len(dirs)
-	n_train = sys.argv[1]
-	n_test = sys.argv[2]
+	n_train = int(sys.argv[1])
+	n_test = int(sys.argv[2])
 	max_epoch = 100
 	look_back = 10
 	prop_increase = 0.01
