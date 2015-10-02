@@ -14,8 +14,9 @@ import Learning
 
 def preprocess(input_file):
     """
-    @summary: 判定する画像の整形を行う。
+    @summary: 予測する画像の整形を行う。
     画像はデスクトップから移動して取得する
+    @param input_file: str 予測する画像のパス
     @return: PIL.Image 整形後の画像
     PIL.Image 顔認識の枠の書かれた画像
     """
@@ -36,10 +37,7 @@ def preprocess(input_file):
     facerect = cascade.detectMultiScale(image_gray, scaleFactor=1.1, minNeighbors=1, minSize=(100, 100))
 
     if len(facerect) > 0:
-        #for rect in facerect:
         rect = facerect[0]
-        #print rect
-        #print tuple(rect[0:2]),tuple(rect[0:2]+rect[2:4])
         cv2.rectangle(image, tuple(rect[0:2]),tuple(rect[0:2]+rect[2:4]), white, thickness=2)
 
         xcenter = rect[0] + (rect[2]/2)
@@ -50,7 +48,6 @@ def preprocess(input_file):
         ssizey = int(ssizex*(46.0/36.0))
         sposy = max( (ycenter-(ssizey/2)), 0 )
 
-        #print sposx, sposy, ssizex, ssizey
         cv2.rectangle(image, (sposx, sposy), (sposx+ssizex, sposy+ssizey), red, thickness=1)
                    
         face_file = "detected.jpg"
