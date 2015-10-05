@@ -14,7 +14,7 @@ macならば http://cactuslab.com/imagemagick/ など
 
 ## Installation
 ```
-git clone https://github.com/ritsu73/TokyoTechFes2015.git
+git clone https://github.com/Arudori5001/TokyoTechFes2015.git
 cd TokyoTechFes2015
 unzip dataset.zip
 ```
