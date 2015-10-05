@@ -2,19 +2,21 @@
 
 import os, sys
 import cv2
-import PIL.Image as Image
 from chainer import FunctionSet
 import chainer.functions as F
 import glob
+import matplotlib.pyplot as plt
 import numpy as np
 import pickle
+import PIL.Image as Image
+import pylab
 
 import Learning
 
 
 def preprocess(input_file):
     """
-    @summary: 予測する画像の整形を行う。
+    @summary: 予測する画像の整形を行う
     @param input_file: str 予測する画像のパス
     @return: PIL.Image 整形後の画像
     PIL.Image 顔認識の枠の書かれた画像
@@ -71,7 +73,7 @@ def preprocess(input_file):
     os.system(com)
 
     com = "display %s"%(resized_file)
-    os.system(com)
+    #os.system(com)
 
     img = Image.open(resized_file)
     img.convert("RGB")
@@ -79,68 +81,11 @@ def preprocess(input_file):
     return img, face_file
 
 
-def display_result(result_class, result_prob, plobs, face_file): 
-    """
-    @summary: 予測結果を表示する
-    @param result_class: int    予測されたラベル(0-Origin)
-    result_prob: float    予測されたラベルの確信度(事後確率)
-    plobs: np.array<float>    各ラベルの確信度リスト
-    face_file: PIL.Image    予測結果を表示するための画像
-    """
-    
-    dataset_dir = "dataset"
-    cluster_names = [os.path.relpath(d, dataset_dir) for d in glob.glob(os.path.join(dataset_dir, "*"))]
-    
-    print("predicted class : " + cluster_names[result_class])
-    print("certainty factor of predicted class : {0}".format(res_prob))
-    print("certainty factors of each classes : ")
-    for c,p in zip(cluster_names, plobs):
-        print(c + " :")
-        print("\t{0:>5.2f}%".format(p*100))
-    
-    
-    msg = "You belong to %s! (%i%%)"%(cluster_names[result_class] , int(100*result_prob))
-    msg_file = "msg.jpg"
-    com = """convert -font Helvetica-Bold -pointsize 40 -gravity north -annotate 0x0-50+50 "%s" -fill white %s %s"""%(
-        msg, face_file, msg_file)
-    os.system(com)
-
-    com = "display %s"%(msg_file)
-    os.system(com)
-
-
-def create_toy_model(n_output):
-    """
-    @summary: トイモデルをつくる
-    """
-    model = FunctionSet(conv1=F.Convolution2D(3,32,5,pad=2),
-        conv2=F.Convolution2D(32,32,5,pad=2),
-        conv3=F.Convolution2D(32,64,5,pad=2),
-        fl5=F.Linear(960, 64),
-        fl6=F.Linear(64, n_output))
-    
-    return model
-    
-    
-def create_toy_image(shape):
-    """
-    @summary: トイデータをつくる
-    """
-    
-    n_pixels = np.prod(shape)
-    imgs = np.arange(n_pixels).reshape(shape[0], shape[1], shape[2], shape[3])
-    imgs = np.array(imgs, dtype=np.float32)
-    
-    return imgs
-
-
 def predict(img):
     """
     @summary: 画像から予測を行う
-    @param img: PIL.Image 予測を行う画像
-    @return: int    予測されたラベル(0-Origin)
-        float    予測されたラベルの確信度(事後確率)
-        np.array<float>    　各ラベルの確信度リスト
+    @param img: PIL.image   予測を行う画像
+    @return: np.array<float>    　各ラベルの確信度(事後確率)のリスト
     """
 
     n_channel = 3
@@ -151,23 +96,82 @@ def predict(img):
         model = pickle.load(f)
     
     record = Learning.img_to_record(img, 0)
-    inp = record.input
-    inp = np.array([inp], dtype=np.float32)
+    inp = np.array([record.input], dtype=np.float32)
             
     oup = Learning.forward(model, inp)
     sm = F.softmax(oup)
     probs = sm.data[0]
-    res = np.argmax(probs)
-    res_prob = np.max(probs)
     
-    return res, res_prob, probs
+    return probs
+
+
+def show_chart(table):
+    """
+    @summary: 棒グラフを表示する
+    @param table: list<tuple<str, float>> ラベルと数値のリスト
+    """
+
+    labels = [x[0] for x in table]
+    values = [x[1] for x in table]
+    width = 0.5
+    margin = 0.8
+    barcolor = "#3D57CC"
+    axis_bgcolor = "#F6F6F6"
+
+    plt.rcParams.update({
+        "font.size":    20,
+        "grid.color":   barcolor,
+        "grid.linestyle":   "-"})
+    pylab.figure(facecolor="w")
+    pylab.axes(axisbg=axis_bgcolor)
+    plt.barh(range(len(table)), values, width, align="center", alpha=1, color=barcolor, edgecolor=barcolor)
+    plt.yticks(np.array(range(len(table))) , labels)
+    pylab.xlabel('Probabilities')
+    pylab.ylabel('Categoriy Names')
+    plt.axis([0, 1, -1, len(table)])
+    plt.grid(True)
+    pylab.subplots_adjust(left=0.25, bottom=0.15)
+    plt.show()
+
+
+def display_result(plobs, face_file): 
+    """
+    @summary: 予測結果を表示する
+    @param plobs: np.array<float>    各ラベルの確信度リスト
+    face_file: PIL.Image    予測結果を表示するための画像
+    """
+    
+    dataset_dir = "dataset"
+    category_names = [os.path.relpath(d, dataset_dir) for d in glob.glob(os.path.join(dataset_dir, "*"))]
+    result_category = np.argmax(probs)
+    result_prob = np.max(probs)
+    
+    print("predicted categoriy : " + category_names[result_category])
+    print("certainty factor of predicted categoriy : {0}".format(result_prob))
+    print("certainty factors of each categories : ")
+    for c,p in zip(category_names, plobs):
+        print(c + " :")
+        print("\t{0:>5.2f}%".format(p*100))
+    
+    
+    msg = "You belong to %s! (%i%%)"%(category_names[result_category] , int(100*result_prob))
+    msg_file = "msg.jpg"
+    com = """convert -font Helvetica-Bold -pointsize 40 -gravity north -annotate 0x0-50+50 "%s" -fill white %s %s"""%(
+        msg, face_file, msg_file)
+    os.system(com)
+
+    com = "display %s &"%(msg_file)
+    os.system(com)
+
+    table = sorted(zip(category_names, probs), key=lambda x:x[1])
+    show_chart(table)
 
 
 if __name__ == "__main__":
     input_file = sys.argv[1]
     img, face_file = preprocess(input_file)
     
-    res, res_prob, probs = predict(img)
+    probs = predict(img)
     
-    display_result(res, res_prob, probs, face_file)
+    display_result(probs, face_file)
     
