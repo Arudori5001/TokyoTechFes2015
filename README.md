@@ -1,4 +1,5 @@
 # TokyoTechFes2015
+工大祭向けの画像判別デモスクリプト
 
 ## Requirements
 * ImageMagick  
@@ -7,8 +8,8 @@ macならば http://cactuslab.com/imagemagick/ など
 `pip install cv2`
 * pillow  
 `pip install pillow`
-* Chainer  
-`pip install chainer`
+* Chainer(ver 1.3.2)  
+`pip install chainer==1.3.2`
 * matplotlib  
 `pip install matplotlib`
 
@@ -17,7 +18,9 @@ macならば http://cactuslab.com/imagemagick/ など
 git clone https://github.com/Arudori5001/TokyoTechFes2015.git
 cd TokyoTechFes2015
 unzip dataset.zip
+pip install ...
 ```
+
 
 ## Usage
 ### 予測
