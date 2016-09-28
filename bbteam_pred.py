@@ -98,7 +98,7 @@ def predict(img):
     record = Learning.img_to_record(img, 0)
     inp = np.array([record.input], dtype=np.float32)
             
-    oup = Learning.forward(model, inp)
+    oup = Learning.forward(model, inp, train=False)
     sm = F.softmax(oup)
     probs = sm.data[0]
     
