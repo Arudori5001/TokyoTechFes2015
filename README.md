@@ -4,13 +4,13 @@
 ## Requirements
 * ImageMagick  
 macならば http://cactuslab.com/imagemagick/ など
-* OpenCV  
+* OpenCV (ver 1.0)  
 `pip install cv2`
-* pillow  
+* pillow (ver 2.9.7)  
 `pip install pillow`
 * Chainer(ver 1.3.2)  
 `pip install chainer==1.3.2`
-* matplotlib  
+* matplotlib (ver 1.4.3)  
 `pip install matplotlib`
 
 ## Installation
