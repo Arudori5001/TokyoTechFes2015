@@ -1,5 +1,6 @@
 # TokyoTechFes2015
-工大祭向けの画像判別デモスクリプト
+工大祭向けの顔画像カテゴリ判別デモスクリプト  
+詳細はhttp://qiita.com/Leben4010/items/aacd5d1fec600f3af569
 
 ## Requirements
 * ImageMagick  
